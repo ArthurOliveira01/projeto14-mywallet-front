@@ -1,13 +1,51 @@
 import styled from "styled-components";
 import { BiExit } from "react-icons/bi";
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { backURL } from "../backURL";
+import { useState } from "react";
 
-export default function HomePage() {
+export default function HomePage({token, setToken, type, setType}) {
+  const [balance, setBalance] = useState();
+  const header = { headers: { Authorization: `Bearer ${token}` } };
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    axios.get(`${backURL}/home`, header)
+    .then(res => {
+      
+    })
+  })
+
+  useEffect(() => {
+    if(token === undefined){
+      navigate("/")
+    }
+  });
+
+  function logout(){
+    setToken(undefined);
+  }
+
+  function entrada(){
+    setType('entrada');
+    navigate('/nova-transacao')
+  }
+
+  function saida(){
+    setType('saida');
+    navigate('/nova-transacao')
+  }
+
+  
+
   return (
     <HomeContainer>
       <Header>
         <h1>Olá, Fulano</h1>
-        <BiExit />
+        <BiExit onClick={logout} />
       </Header>
 
       <TransactionsContainer>
@@ -38,11 +76,11 @@ export default function HomePage() {
 
       <ButtonsContainer>
         <button>
-          <AiOutlinePlusCircle />
+          <AiOutlinePlusCircle onClick={entrada} />
           <p>Nova <br /> entrada</p>
         </button>
         <button>
-          <AiOutlineMinusCircle />
+          <AiOutlineMinusCircle onClick={saida} />
           <p>Nova <br />saída</p>
         </button>
       </ButtonsContainer>
